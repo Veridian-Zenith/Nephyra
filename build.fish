@@ -1,0 +1,9 @@
+#!/usr/bin/env fish
+# Build Nephyra in release mode and copy the binary to ~/bin (user-local bin dir)
+
+cargo build --release
+set BIN_DIR $HOME/bin
+set RELEASE_BIN (pwd)/target/release/Nephyra
+mkdir -p $BIN_DIR
+cp $RELEASE_BIN $BIN_DIR/Nephyra
+echo "Build complete. Binary is at $BIN_DIR/Nephyra"

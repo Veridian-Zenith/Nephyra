@@ -6,6 +6,7 @@ mod modules {
     pub mod hardware_info;
     pub mod power_status;
     pub mod system_report;
+    pub mod bootloader_check;
 }
 
 use std::env;
@@ -32,6 +33,7 @@ fn main() {
         "hardware" => modules::hardware_info::run(),
         "power" => modules::power_status::run(),
         "report" => modules::system_report::run(),
+        "bootloader" => modules::bootloader_check::run(),
         _ => {
             eprintln!("❌ Unknown module: {}", args[1]);
             println!("Try: core, kernel, hardware, power, report, kernel_suggest");

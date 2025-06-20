@@ -72,7 +72,3 @@ Nephyra aims to be a powerful CLI toolkit that intelligently inspects, explains,
 - Keep modules decoupled and optional for lightweight usage  
 - Provide developer-friendly API for scripting and automation  
 - Prioritize privacy: no data leaves the system without explicit user consent
-
----
-
-# Let’s make Nephyra the ultimate Linux setup whisperer! 🚀
