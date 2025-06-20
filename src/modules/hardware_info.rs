@@ -2,6 +2,7 @@ use std::process::Command;
 use std::fs::OpenOptions;
 use std::io::Write;
 use chrono::Local;
+use serde_json::Value;
 
 fn run_command(cmd: &str, args: &[&str]) -> Result<String, String> {
     let output = Command::new(cmd)
@@ -194,4 +195,86 @@ pub fn run() {
     }
 
     println!("\n🔎 Detailed hardware info dumped to {}", log_path);
+}
+
+pub fn get_summary() -> String {
+    // CPU summary
+    let lscpu = run_command("lscpu", &[]).unwrap_or_default();
+    let (cpu_model, cpu_cores, _cpu_threads) = parse_basic_cpu_info(&lscpu);
+    // RAM summary
+    let mem_info = parse_meminfo();
+    let ram = if let Some((total_kib, _)) = mem_info {
+        format_mem_kib(total_kib)
+    } else {
+        "Unknown".to_string()
+    };
+    // Get root device using findmnt
+    let findmnt_json = run_command("findmnt", &["-J", "/"]).unwrap_or_default();
+    let mut root_device = "Unknown".to_string();
+    if let Ok(json) = serde_json::from_str::<Value>(&findmnt_json) {
+        if let Some(filesystems) = json.get("filesystems").and_then(|v| v.as_array()) {
+            if let Some(fs) = filesystems.get(0) {
+                if let Some(source) = fs.get("source").and_then(|v| v.as_str()) {
+                    if let Some(dev) = source.strip_prefix("/dev/") {
+                        let dev_clean = dev.split(['[', '/']).next().unwrap_or(dev);
+                        root_device = dev_clean.to_string();
+                    }
+                }
+            }
+        }
+    }
+    // Get all disks and their partitions from lsblk
+    let lsblk_json = run_command("lsblk", &["-o", "NAME,SIZE,TYPE", "-J"]).unwrap_or_default();
+    let mut root_size = "Unknown".to_string();
+    let mut other_devices = Vec::new();
+    if let Ok(json) = serde_json::from_str::<Value>(&lsblk_json) {
+        if let Some(blockdevices) = json.get("blockdevices").and_then(|v| v.as_array()) {
+            for dev in blockdevices {
+                let dev_name = dev.get("name").and_then(|v| v.as_str()).unwrap_or("");
+                let dev_size = dev.get("size").and_then(|v| v.as_str()).unwrap_or("");
+                let dev_type = dev.get("type").and_then(|v| v.as_str()).unwrap_or("");
+                if dev_type == "disk" {
+                    let mut is_root_disk = false;
+                    if let Some(children) = dev.get("children").and_then(|v| v.as_array()) {
+                        for part in children {
+                            let part_name = part.get("name").and_then(|v| v.as_str()).unwrap_or("");
+                            let part_size = part.get("size").and_then(|v| v.as_str()).unwrap_or("");
+                            if part_name == root_device {
+                                root_size = part_size.to_string();
+                                is_root_disk = true;
+                            }
+                        }
+                    }
+                    if !is_root_disk {
+                        other_devices.push(format!("{} ({})", dev_name, dev_size));
+                    }
+                }
+            }
+        }
+    }
+    // Get used and free space for root using df
+    let df_output = run_command("df", &["-h", "/", "--output=size,used,avail,target"]).unwrap_or_default();
+    let mut used = "?".to_string();
+    let mut avail = "?".to_string();
+    for (i, line) in df_output.lines().enumerate() {
+        if i == 1 {
+            let cols: Vec<&str> = line.split_whitespace().collect();
+            if cols.len() >= 4 {
+                // Size Used Avail Mounted
+                used = cols[1].to_string();
+                avail = cols[2].to_string();
+            }
+        }
+    }
+    let storage_str = if root_device != "Unknown" && root_size != "Unknown" {
+        format!("{} ({}) Used: {} Free: {}", root_device, root_size, used, avail)
+    } else {
+        "Unknown".to_string()
+    };
+    let other_str = if !other_devices.is_empty() {
+        format!("Other Devices: {}", other_devices.join(", "))
+    } else {
+        String::new()
+    };
+    format!("CPU: {} | Cores: {} | RAM: {} | Main Storage: {}\n{}", cpu_model, cpu_cores, ram, storage_str, other_str)
 }

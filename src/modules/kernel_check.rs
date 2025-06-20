@@ -170,6 +170,37 @@ pub fn run() {
 
     println!();
 }
+
+pub fn get_summary() -> String {
+    let uname_output = std::process::Command::new("uname")
+        .arg("-r")
+        .output()
+        .unwrap_or_else(|_| panic!("Failed to run uname"));
+    let current_kernel = String::from_utf8_lossy(&uname_output.stdout).trim().to_string();
+
+    let modules_dir = "/lib/modules";
+    let mut installed_kernels = vec![];
+    if let Ok(entries) = std::fs::read_dir(modules_dir) {
+        for entry in entries.flatten() {
+            if let Ok(file_type) = entry.file_type() {
+                if file_type.is_dir() {
+                    installed_kernels.push(entry.file_name().to_string_lossy().to_string());
+                }
+            }
+        }
+    }
+    installed_kernels.sort();
+    let mut summary = format!("Kernel: {}\nInstalled Kernels:", current_kernel);
+    for kernel in &installed_kernels {
+        if kernel == &current_kernel {
+            summary.push_str(&format!("\n  * {} (running)", kernel));
+        } else {
+            summary.push_str(&format!("\n  - {}", kernel));
+        }
+    }
+    summary
+}
+
 // This module checks the current kernel version, lists installed kernels,
 // and verifies if the corresponding kernel headers package is installed.
 // It provides installation instructions based on the detected package manager.

@@ -75,8 +75,9 @@ Run Nephyra with a module name:
 ```sh
 Nephyra kernel
 Nephyra bootloader
-Nephyra hardware
+Nephyra hardware        ## **WARNING** This will output an extremely detailed list to hardware_info.log!!
 Nephyra power
+Nephyra report
 ```
 
 Note: The bootloader command **likely requires root privileges**.
