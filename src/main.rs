@@ -7,6 +7,7 @@ mod modules {
     pub mod power_status;
     pub mod system_report;
     pub mod bootloader_check;
+    pub mod package_check;
 }
 
 use std::env;
@@ -24,6 +25,7 @@ fn main() {
         println!("  hardware");
         println!("  power");
         println!("  report");
+        println!("  packages");
         return;
     }
 
@@ -34,9 +36,10 @@ fn main() {
         "power" => modules::power_status::run(),
         "report" => modules::system_report::run(),
         "bootloader" => modules::bootloader_check::run(),
+        "packages" => modules::package_check::run(),
         _ => {
             eprintln!("❌ Unknown module: {}", args[1]);
-            println!("Try: core, kernel, hardware, power, report, kernel_suggest");
+            println!("Try: core, kernel, hardware, power, report, packages, kernel_suggest");
         }
     }
 }

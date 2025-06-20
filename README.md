@@ -78,14 +78,18 @@ Nephyra bootloader
 Nephyra hardware        ## **WARNING** This will output an extremely detailed list to hardware_info.log!!
 Nephyra power
 Nephyra report
+Nephyra packages        ## Check for orphaned/outdated packages and updates (interactive removal supported)
 ```
+
+- The `packages` module works with pacman, apt, dnf, apk, zypper, and emerge.
+- If orphaned packages are found, you will be prompted to remove them to preserve storage (requires sudo for removal).
 
 Note: The bootloader command **likely requires root privileges**.
 
 You can also run the binary directly from the build directory:
 
 ```sh
-./target/release/Nephyra kernel
+./target/release/Nephyra report
 ```
 
 ## Contributing
@@ -93,4 +97,4 @@ PRs and issues welcome! This is a work in progress.
 
 ---
 
-© 2025 Nephyra contributors
+© 2025 Veridian Zenith

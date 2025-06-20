@@ -16,7 +16,7 @@ Nephyra aims to be a powerful CLI toolkit that intelligently inspects, explains,
 ### Bootloader Awareness
 - Detect bootloader type (GRUB, systemd-boot, rEFInd, etc.)  
 - Parse config to identify default kernel and boot options  
-- Support for modifying or suggesting improvements safely  
+- Support for modifying or suggesting improvements safely
 
 ### Power & CPU Governor
 - Detect CPU model, frequency scaling driver (intel_pstate, acpi_cpufreq, etc.)  
