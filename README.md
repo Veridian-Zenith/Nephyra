@@ -50,19 +50,19 @@ set -gx PATH $HOME/bin $PATH
 #### Bash
 Add this to your `~/.bashrc` or `~/.bash_profile`:
 ```sh
-echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+export PATH="$HOME/bin:$PATH"
 ```
 
 #### Zsh
 Add this to your `~/.zshrc`:
 ```sh
-echo 'export PATH="$HOME/bin:$PATH"' >> ~/.zshrc
+PATH="$HOME/bin:$PATH"
 ```
 
 #### fish
 Add this to your `~/.config/fish/config.fish`:
 ```fish
-echo 'fish_add_path $HOME/bin' >> ~/.config/fish/config.fish
+fish_add_path $HOME/bin
 ```
 
 After updating your config, restart your terminal or run the relevant `source` command to reload your shell configuration.
