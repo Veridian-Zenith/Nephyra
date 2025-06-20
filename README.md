@@ -74,7 +74,7 @@ Run Nephyra with a module name:
 
 ```sh
 Nephyra kernel
-Nephyra bootloader   # (may require root priveilleges.)
+Nephyra bootloader
 Nephyra hardware
 Nephyra power
 ```
