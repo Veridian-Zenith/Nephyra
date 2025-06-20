@@ -1,0 +1,10 @@
+.DS_Store
+/target
+**/*.rs.bk
+Cargo.lock
+.idea/
+/.vscode/
+*.swp
+*.swo
+*.bak
+hardware_info.log
