@@ -1,100 +1,147 @@
-# Nephyra (Beta/Test)
+---
 
-Nephyra is your terminal-based, smart system insight assistant.
+# 🧠 Nephyra (Beta/Test)
 
-And she’ll tell you everything you didn’t know you needed. (WIP)
+**Nephyra** is your terminal-based, smart system insight assistant.
+She’ll tell you everything you didn’t even know you needed.
 
-## 🔧 Goals
-- Cross-check active vs installed kernels
-- Detect mismatched headers/modules
-- Report system performance, boot mode, DE/WM info
-- Natural-language input/output
-- More to come, still a WIP project.
+> *Status: Work in Progress*
 
-## How to build
+---
 
-You can build Nephyra using the provided scripts for your shell. The binary will be placed in your `~/bin` directory (make sure it's in your `$PATH`):
+## 🎯 Goals
 
-### For bash/sh/zsh
+* Cross-check active vs installed kernel versions
+* Detect mismatched headers and kernel modules
+* Report system performance, boot mode, DE/WM information
+* Natural-language input and output for commands
+* Many more features to come — still in early development
+
+---
+
+## 🛠️ Building Nephyra
+
+Build scripts are provided for common shells. The compiled binary will be placed in `~/bin` — ensure that directory is in your `$PATH`.
+
+### For Bash, sh, or Zsh:
+
 ```sh
 ./build.sh
 # or
 ./build.zsh
 ```
 
-### For fish shell
+### For Fish:
+
 ```fish
 ./build.fish
 ```
 
-This will build the release version and copy the binary to `~/bin/Nephyra`.
+The build script compiles the release binary and places it in `~/bin/Nephyra`.
 
-## Path Setup
+---
 
-To run `Nephyra` from anywhere, add `~/bin` to your `PATH`.
+## 🧭 PATH Setup
 
-### Temporary (for current session only)
+To run `Nephyra` globally from anywhere, add `~/bin` to your shell's `$PATH`.
 
-#### Bash/sh/zsh
+### Temporary (Current Session Only)
+
+#### Bash/sh/Zsh
+
 ```sh
 export PATH="$HOME/bin:$PATH"
 ```
 
-#### fish
+#### Fish
+
 ```fish
 set -gx PATH $HOME/bin $PATH
 ```
 
-### Permanent (all future sessions)
+---
+
+### Permanent (All Future Sessions)
 
 #### Bash
-Add this to your `~/.bashrc` or `~/.bash_profile`:
+
+Add to your `~/.bashrc` or `~/.bash_profile`:
+
 ```sh
 export PATH="$HOME/bin:$PATH"
 ```
 
 #### Zsh
-Add this to your `~/.zshrc`:
+
+Add to your `~/.zshrc`:
+
 ```sh
-PATH="$HOME/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 ```
 
-#### fish
-Add this to your `~/.config/fish/config.fish`:
+#### Fish
+
+Add to `~/.config/fish/config.fish`:
+
 ```fish
 fish_add_path $HOME/bin
 ```
 
-After updating your config, restart your terminal or run the relevant `source` command to reload your shell configuration.
+Then restart your terminal or run `source` on the appropriate config file to apply changes.
 
-## Usage
+---
 
+## 🚀 Usage
 
-Run Nephyra with a module name:
+Run Nephyra by passing a module name:
 
 ```sh
 Nephyra kernel
 Nephyra bootloader
-Nephyra hardware        ## **WARNING** This will output an extremely detailed list to hardware_info.log!!
+Nephyra hardware         # ⚠️ Dumps detailed info to hardware_info.log
 Nephyra power
 Nephyra report
-Nephyra packages        ## Check for orphaned/outdated packages and updates (interactive removal supported)
+Nephyra packages         # Checks for orphaned/outdated packages + update manager
 ```
 
-- The `packages` module works with pacman, apt, dnf, apk, zypper, and emerge.
-- If orphaned packages are found, you will be prompted to remove them to preserve storage (requires sudo for removal).
+### Notes:
 
-Note: The bootloader command **likely requires root privileges**.
+* `packages` module supports: **pacman**, **apt**, **dnf**, **apk**, **zypper**, and **emerge**.
+* If orphaned packages are found, you’ll be prompted (requires `sudo`) to clean them up.
+* The `bootloader` module **may require root privileges** on some systems.
 
-You can also run the binary directly from the build directory:
+### Running Without PATH Setup:
+
+You can always run directly from the build output directory:
 
 ```sh
 ./target/release/Nephyra report
 ```
 
-## Contributing
-PRs and issues welcome! This is a work in progress.
+---
+
+## 🤝 Contributing
+
+PRs, issues, and suggestions are warmly welcomed!
+Nephyra is still early in development, so ideas and feedback are appreciated.
+
+---
+
+## 📝 License
+
+**Dual-licensed** under the **GNU AGPLv3** for community use and the **Veridian Commercial License (VCL 1.0)** for proprietary applications.
+
+See the [LICENSE](LICENSE) file for full details.
+
+---
+
+## ⚖️ Legal Disclaimer
+
+**Veridian Zenith** is a digital label and project organization operated by **Jeremy Matlock**, also known as **Dae Euhwa**.
+All works published under this name are the intellectual property of Jeremy Matlock unless otherwise stated.
 
 ---
 
 © 2025 Veridian Zenith
+
+---
